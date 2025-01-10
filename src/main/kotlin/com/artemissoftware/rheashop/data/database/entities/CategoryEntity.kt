@@ -2,7 +2,7 @@ package com.artemissoftware.rheashop.data.database.entities
 import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 
-class CategoryEntity {
+class CategoryEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long = 0
@@ -11,4 +11,8 @@ class CategoryEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "category")
     var products: List<ProductEntity> = emptyList()
+
+    constructor(name: String): this(){
+        this.name = name
+    }
 }

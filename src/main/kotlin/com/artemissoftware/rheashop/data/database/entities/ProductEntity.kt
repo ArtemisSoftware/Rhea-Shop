@@ -4,7 +4,7 @@ import jakarta.persistence.*
 import java.math.BigDecimal
 
 
-class ProductEntity {
+class ProductEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long = 0
@@ -20,4 +20,20 @@ class ProductEntity {
 
     @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], orphanRemoval = true)
     var images: List<ImageEntity> = emptyList()
+
+    constructor(
+        name: String,
+        brand: String,
+        price: BigDecimal,
+        inventory: Int,
+        description: String,
+        category: CategoryEntity
+    ) : this() {
+        this.name = name
+        this.brand = brand
+        this.price = price
+        this.inventory = inventory
+        this.description = description
+        this.category = category
+    }
 }

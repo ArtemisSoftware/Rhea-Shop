@@ -6,8 +6,8 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface ProductRepository: JpaRepository<ProductEntity, Long> {
-    fun findByCategoryName(category: String?): List<ProductEntity>
-    fun findByBrand(brand: String?): List<ProductEntity>
+    fun findByCategoryName(category: String): List<ProductEntity>
+    fun findByBrand(brand: String): List<ProductEntity>
     fun findByCategoryNameAndBrand(category: String, brand: String): List<ProductEntity>
     fun findByName(name: String): List<ProductEntity>
     fun findByBrandAndName(brand: String, name: String): List<ProductEntity>
