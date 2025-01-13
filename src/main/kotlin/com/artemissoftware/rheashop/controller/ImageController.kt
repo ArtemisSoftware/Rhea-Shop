@@ -1,7 +1,8 @@
-package com.artemissoftware.rheashop.service
+package com.artemissoftware.rheashop.controller
 
 import com.artemissoftware.rheashop.data.network.response.ApiResponse
 import com.artemissoftware.rheashop.exception.ResourceNotFoundException
+import com.artemissoftware.rheashop.service.ImageService
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.core.io.Resource
 import org.springframework.http.HttpHeaders
@@ -11,11 +12,10 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
-import java.awt.Image
 import java.sql.SQLException
 
 @RestController
-@RequestMapping("\${api.prefix:/api/v1}/images")
+@RequestMapping("\${api.prefix}/images")
 class ImageController(private val imageService: ImageService) {
 
     @PostMapping("/upload")
@@ -25,7 +25,8 @@ class ImageController(private val imageService: ImageService) {
     ): ResponseEntity<ApiResponse> {
         try {
             val images = imageService.saveImages(productId, files)
-            return ResponseEntity.ok(ApiResponse("Upload success!", images))
+            return ResponseEntity
+                .ok(ApiResponse("Upload success!", images))
         } catch (e: Exception) {
             return ResponseEntity
                 .status(INTERNAL_SERVER_ERROR)
