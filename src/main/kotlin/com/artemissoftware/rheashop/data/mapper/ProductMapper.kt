@@ -22,8 +22,6 @@ fun UpdateProductRequest.toEntity(existingProduct: ProductEntity, category: Cate
     existingProduct.price = price
     existingProduct.inventory = inventory
     existingProduct.description = description
-
-    val category: Category = categoryRepository.findByName(request.getCategory().getName())
-    existingProduct.setCategory(category)
+    existingProduct.category = category
     return existingProduct
 }
