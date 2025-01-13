@@ -2,20 +2,24 @@ package com.artemissoftware.rheashop.service
 
 import com.artemissoftware.rheashop.data.database.entities.CategoryEntity
 import com.artemissoftware.rheashop.data.database.entities.ProductEntity
+import com.artemissoftware.rheashop.data.mapper.toDto
 import com.artemissoftware.rheashop.data.mapper.toEntity
+import com.artemissoftware.rheashop.data.network.dto.ProductDto
 import com.artemissoftware.rheashop.data.network.request.AddProductRequest
 import com.artemissoftware.rheashop.data.network.request.UpdateProductRequest
 import com.artemissoftware.rheashop.exception.ProductNotFoundException
+import com.artemissoftware.rheashop.exception.ResourceNotFoundException
 import com.artemissoftware.rheashop.repository.CategoryRepository
+import com.artemissoftware.rheashop.repository.ImageRepository
 import com.artemissoftware.rheashop.repository.ProductRepository
 import org.springframework.stereotype.Service
-import java.util.function.Supplier
 
 
 @Service
 class ProductService(
     private val productRepository: ProductRepository,
-    private val categoryRepository: CategoryRepository
+    private val categoryRepository: CategoryRepository,
+    private val imageRepository: ImageRepository,
 ) {
 
     private fun productExists(name: String, brand: String) = productRepository.existsByNameAndBrand(name, brand)
@@ -54,21 +58,27 @@ class ProductService(
             )
     }
 
-    fun getAllProducts() = productRepository.findAll()
+    fun getAllProducts() = productRepository.findAll().map { convertToDto(it) }
 
-    fun getProductsByCategory(category: String) = productRepository.findByCategoryName(category)
+    fun getProductById(id: Long): ProductDto =
+        productRepository.findById(id)
+            .map { convertToDto(it) }
+            .orElseThrow { ResourceNotFoundException("Product not found!") }
 
-    fun getProductsByBrand(brand: String) = productRepository.findByBrand(brand)
+    fun getProductsByCategory(category: String) = productRepository.findByCategoryName(category).map { convertToDto(it) }
 
-    fun getProductsByCategoryAndBrand(category: String, brand: String) = productRepository.findByCategoryNameAndBrand(category, brand)
+    fun getProductsByBrand(brand: String) = productRepository.findByBrand(brand).map { convertToDto(it) }
 
-    fun getProductsByName(name: String) = productRepository.findByName(name)
+    fun getProductsByCategoryAndBrand(category: String, brand: String) = productRepository.findByCategoryNameAndBrand(category, brand).map { convertToDto(it) }
 
-    fun getProductsByBrandAndName(brand: String, name: String) = productRepository.findByBrandAndName(brand, name)
+    fun getProductsByName(name: String) = productRepository.findByName(name).map { convertToDto(it) }
+
+    fun getProductsByBrandAndName(brand: String, name: String) = productRepository.findByBrandAndName(brand, name).map { convertToDto(it) }
 
     fun countProductsByBrandAndName(brand: String, name: String) =  productRepository.countByBrandAndName(brand, name)
 
-//    fun getConvertedProducts(products: List<Product?>): List<ProductDto> {
-//        return products.stream().map<Any>(this::convertToDto).toList()
-//    }
+    private fun convertToDto(product: ProductEntity): ProductDto {
+        val images = imageRepository.findByProductId(product.id)
+        return product.toDto(images)
+    }
 }
