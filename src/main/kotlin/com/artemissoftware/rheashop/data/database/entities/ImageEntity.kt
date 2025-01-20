@@ -3,8 +3,8 @@ package com.artemissoftware.rheashop.data.database.entities
 import jakarta.persistence.*
 import java.sql.Blob
 
-
-class ImageEntity {
+@Entity
+class ImageEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long = 0
