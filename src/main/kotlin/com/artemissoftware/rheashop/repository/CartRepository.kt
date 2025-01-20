@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface CartRepository : JpaRepository<CartEntity, Long> {
-    fun findByUserId(userId: Long): CartEntity
+    fun findByUserId(userId: Long): CartEntity?
 }
