@@ -1,8 +1,8 @@
 package com.artemissoftware.rheashop.data.network.request
 
 data class CreateUserRequest (
-    var firstName: String,
-    var lastName: String,
-    var email: String,
-    var password: String
+    val firstName: String,
+    val lastName: String,
+    val email: String,
+    val password: String
 )
