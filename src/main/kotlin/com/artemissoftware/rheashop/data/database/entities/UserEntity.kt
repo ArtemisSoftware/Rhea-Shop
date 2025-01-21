@@ -22,15 +22,15 @@ class UserEntity {
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
     var orders: List<OrderEntity> = emptyList()
 
-//    @ManyToMany(
-//        fetch = FetchType.EAGER,
-//        cascade = [CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH]
-//    )
-//    @JoinTable(
-//        name = "user_roles",
-//        joinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")],
-//        inverseJoinColumns = [JoinColumn(name = "role_id", referencedColumnName = "id")]
-//    )
-//    private val roles: Collection<Role> = HashSet<Role>()
+    @ManyToMany(
+        fetch = FetchType.EAGER,
+        cascade = [CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH]
+    )
+    @JoinTable(
+        name = "user_roles",
+        joinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")],
+        inverseJoinColumns = [JoinColumn(name = "role_id", referencedColumnName = "id")]
+    )
+    var roles = HashSet<RoleEntity>()
 
 }
