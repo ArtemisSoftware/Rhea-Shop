@@ -6,5 +6,5 @@ data class UserDto(
     val lastName: String,
     val email: String,
     val orders: List<OrderDto>,
-    val cart: CartDto
+    val cart: CartDto? = null
 )
