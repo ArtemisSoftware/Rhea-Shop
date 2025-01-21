@@ -3,7 +3,7 @@ package com.artemissoftware.rheashop.data.database.entities
 import jakarta.persistence.*
 import java.math.BigDecimal
 
-
+@Entity
 class ProductEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

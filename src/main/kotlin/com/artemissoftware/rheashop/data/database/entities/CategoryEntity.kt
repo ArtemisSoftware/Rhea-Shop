@@ -2,6 +2,7 @@ package com.artemissoftware.rheashop.data.database.entities
 import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 
+@Entity
 class CategoryEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
