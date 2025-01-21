@@ -12,7 +12,7 @@ class CartEntity {
     var totalAmount: BigDecimal = BigDecimal.ZERO
 
     @OneToMany(mappedBy = "cart", cascade = [CascadeType.ALL], orphanRemoval = true)
-    var items: MutableSet<CartItemEntity> = HashSet<CartItemEntity>()
+    var items: MutableSet<CartItemEntity> = HashSet()
 
     @OneToOne
     @JoinColumn(name = "user_id")
