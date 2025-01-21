@@ -28,7 +28,7 @@ class OrderService(
 ) {
 
     @Transactional
-    fun placeOrder(userId: Long): OrderEntity {
+    fun placeOrder(userId: Long): OrderDto {
 
         cartRepository.findByUserId(userId)?.let { cart ->
             val order = createOrder(cart)
@@ -38,7 +38,7 @@ class OrderService(
 
             val savedOrder = orderRepository.save(order)
             //-----------------------cartService.clearCart(cart.id)
-            return savedOrder
+            return savedOrder.toDto()
         } ?: run {
             throw ResourceNotFoundException("Cart not found")
         }
