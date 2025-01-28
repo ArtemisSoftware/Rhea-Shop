@@ -5,6 +5,8 @@ import com.artemissoftware.rheashop.exception.ResourceNotFoundException
 import com.artemissoftware.rheashop.service.CartItemService
 import com.artemissoftware.rheashop.service.CartService
 import com.artemissoftware.rheashop.service.UserService
+import io.jsonwebtoken.JwtException
+import org.apache.tomcat.websocket.Constants.UNAUTHORIZED
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
@@ -24,19 +26,26 @@ class CartItemController(
         @RequestParam quantity: Int
     ): ResponseEntity<ApiResponse> {
         try {
-//            val user = userService.getAuthenticatedUser()
-//            val cart = cartService.initializeNewCart(user)
-//            cartItemService.addItemToCart(cart.id, productId, quantity)
-
-            return ResponseEntity
-                .ok(ApiResponse("Add Item Success"))
+            val user = userService.getAuthenticatedUser()
+            user?.let {
+                val cart = cartService.initializeNewCart(it)
+                cartItemService.addItemToCart(cart.id, productId, quantity)
+                return ResponseEntity
+                    .ok(ApiResponse("Add Item Success"))
+            } ?: run {
+                return ResponseEntity
+                    .status(NOT_FOUND)
+                    .body(ApiResponse("User not found"))
+            }
         } catch (e: ResourceNotFoundException) {
             return ResponseEntity
                 .status(NOT_FOUND)
-                .body<ApiResponse>(ApiResponse("Error adding item to card", e.message))
-        } //catch (e: JwtException) {
-//            return ResponseEntity.status(UNAUTHORIZED).body<ApiResponse>(ApiResponse(e.getMessage(), null))
-//        }
+                .body(ApiResponse("Error adding item to card", e.message))
+        } catch (e: JwtException) {
+            return ResponseEntity
+                .status(UNAUTHORIZED)
+                .body(ApiResponse("Jwt error ", e.message))
+        }
     }
 
     @DeleteMapping("/cart/{cartId}/item/{itemId}/remove")

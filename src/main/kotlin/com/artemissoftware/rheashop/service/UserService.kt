@@ -8,12 +8,15 @@ import com.artemissoftware.rheashop.data.network.request.UserUpdateRequest
 import com.artemissoftware.rheashop.exception.AlreadyExistsException
 import com.artemissoftware.rheashop.exception.ResourceNotFoundException
 import com.artemissoftware.rheashop.repository.UserRepository
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 
 @Service
 class UserService(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val passwordEncoder: PasswordEncoder
 ) {
 
     fun getUserById(userId: Long): UserDto {
@@ -31,7 +34,7 @@ class UserService(
         else {
             val user = UserEntity()
             user.email = request.email
-            user.password = "1234"//passwordEncoder.encode(request.password)
+            user.password = passwordEncoder.encode(request.password)
             user.firstName = request.firstName
             user.lastName = request.lastName
             return userRepository.save(user).toDto()
@@ -56,9 +59,9 @@ class UserService(
             )
     }
 
-//    override fun getAuthenticatedUser(): User {
-//        val authentication: Authentication = SecurityContextHolder.getContext().getAuthentication()
-//        val email: String = authentication.getName()
-//        return userRepository!!.findByEmail(email)
-//    }
+    fun getAuthenticatedUser(): UserEntity? {
+        val authentication = SecurityContextHolder.getContext().authentication
+        val email: String = authentication.name
+        return userRepository.findByEmail(email)
+    }
 }
