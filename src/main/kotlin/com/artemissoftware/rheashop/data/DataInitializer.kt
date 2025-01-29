@@ -20,8 +20,8 @@ class DataInitializer(
 
 
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
-        createDefaultUserIfNotExits()
         createDefaultRoleIfNotExits()
+        createDefaultUserIfNotExits()
         createDefaultAdminIfNotExits()
     }
 
@@ -50,7 +50,7 @@ class DataInitializer(
         DEFAULT_ROLES
             .stream()
             .filter { role -> roleRepository.findByName(role) == null }
-            .map { RoleEntity() }
+            .map { RoleEntity(it) }
             .forEach { entity -> roleRepository.save(entity) }
     }
 

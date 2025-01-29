@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
 import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.http.HttpStatus.CONFLICT
+import org.springframework.security.access.prepost.PreAuthorize
 
 @RestController
 @RequestMapping("\${api.prefix}/products")
@@ -38,12 +39,12 @@ class ProductController(private val productService: ProductService) {
                 .body(ApiResponse("Product not found with id $productId", e.message))
         }
     }
-/*
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/add")
-    fun addProduct(@RequestBody product: AddProductRequest): ResponseEntity<ApiResponse> {
+    fun addProduct(@RequestBody request: AddProductRequest): ResponseEntity<ApiResponse> {
         try {
-            val product = productService.addProduct(product)
+            val product = productService.addProduct(request)
             return ResponseEntity
                 .ok(ApiResponse("Add product success!", product.toDto()))
         } catch (e: AlreadyExistsException) {
@@ -66,7 +67,7 @@ class ProductController(private val productService: ProductService) {
         } catch (e: ResourceNotFoundException) {
             return ResponseEntity
                 .status(NOT_FOUND)
-                .body(ApiResponse("Error updating product with id ${productId}", e.message))
+                .body(ApiResponse("Error updating product with id $productId", e.message))
         }
     }
 
@@ -83,7 +84,7 @@ class ProductController(private val productService: ProductService) {
                 .body(ApiResponse("Error deleting product", e.message))
         }
     }
-*/
+
     @GetMapping("/products/by/brand-and-name")
     fun getProductByBrandAndName(
         @RequestParam brandName: String,

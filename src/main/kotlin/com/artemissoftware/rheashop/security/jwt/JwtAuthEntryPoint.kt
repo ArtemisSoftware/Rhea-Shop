@@ -23,13 +23,11 @@ class JwtAuthEntryPoint : AuthenticationEntryPoint {
         response.status = HttpServletResponse.SC_UNAUTHORIZED
 
         val body: MutableMap<String, Any> = HashMap()
-        //
-        body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
+        //body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
         body["error"] = "Unauthorized"
         body["message"] = "You may login and try again!"
 
-        /** body.put("path", request.getServletPath()); */
-        body["path"] = request.servletPath
+        //body["path"] = request.servletPath
 
         val mapper = ObjectMapper()
         mapper.writeValue(response.outputStream, body)
