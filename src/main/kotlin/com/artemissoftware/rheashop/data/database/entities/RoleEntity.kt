@@ -16,5 +16,6 @@ class RoleEntity() {
     }
 
     @ManyToMany(mappedBy = "roles")
-    var users = HashSet<UserEntity>()
+    var users: MutableSet<UserEntity> = HashSet()
+
 }

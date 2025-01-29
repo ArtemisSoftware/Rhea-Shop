@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface RoleRepository : JpaRepository<RoleEntity, Long> {
-    fun findByName(role: String): RoleEntity
+    fun findByName(role: String): RoleEntity?
 }
